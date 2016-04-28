@@ -5,6 +5,7 @@
 - Use partials for static content
 - Use link_to
 - Work with rails form helpers
+- Use URL helpers with link_to
 
 # External resources
 
@@ -12,7 +13,7 @@ The following can be used along with this lesson:
 
 * [Glossary](glossary.md)
 * [view helpers demo app](https://github.com/tgaff/view_helpers_demo_app)
-* [Lab](https://github.com/sf-wdi-25/rails_partials_helpers)
+* [Lab](https://github.com/sf-wdi-27-28/rails_partials_helpers)
 * [FormBuilder docs](http://apidock.com/rails/ActionView/Helpers/FormBuilder)
 * [Custom View Helpers](http://www.rails-dev.com/custom-view-helpers-in-rails-4)
 * [render docs](http://apidock.com/rails/ActionController/Base/render)
