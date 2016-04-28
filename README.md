@@ -8,7 +8,7 @@
 
 # External resources
 
-The following is used along with this lesson:
+The following can be used along with this lesson:
 * [Glossary](glossary.md)
 * [view helpers demo app](https://github.com/tgaff/view_helpers_demo_app)
 * [Lab](https://github.com/sf-wdi-25/rails_partials_helpers)
@@ -17,14 +17,15 @@ The following is used along with this lesson:
 
 # Layouts and Partials
 
-* Layouts can be seen as the container for a view.  Each view is rendered within a container.  We can use these for common header/footer material.
-* Partials are used to DRY views.  We can use them to move code that is repeated in several views to a separate _partial_ file.
+* Layouts can be seen as the container for a view.  Each view is rendered within a layout.  We can use layouts for common header/footer material.
+* Partials are used to DRY views.  We can use them to move code that is repeated in several views into a separate _partial_ file.
+* Views are rendered into the `<%= yield %>` tag in the layout.
 
 When the app is created, Rails will automatically add a layout `application.html.erb` in `app/views/layouts/application.html.erb`. This layout already contains a yield statement and all the links to css and js files in the head part of the html document.
 
 ## Using views with Rails
 
-In Rails, the logic for rendering a view is quite straightforward. Given that every route in Rails will execute a method inside a controller, when the method is executed, Rails will look for:
+In Rails, the basic logic for rendering a view is quite straightforward.  Given that every route in Rails will execute a method inside a controller, when the method is executed, Rails will look for:
 
 1. A folder inside `views` corresponding to the controller's name (folder `posts` for `PostsController`).
 2. A file with the method's name and `.html.erb`.
@@ -83,71 +84,6 @@ Layouts wrap views.  They are typically used for content that you want to appear
 
 Create a new Rails app "views_and_layouts" and scaffold the resource posts:
 
-## Integrating Layouts - Codealong
-
-```bash
-rails new views_and_layouts
-cd views_and_layouts
-rails g scaffold Post title content:text
-rake db:migrate
-```
-
-Open the posts controller and look at how each method renders the templates: some of them, like index and show, are abstract because the name of the template is the name of the method, but for some other methods, like create or update, we need to explicitly tell Rails what to do at the end of the method.
-
-### Different Layouts
-
-By default, Rails will render the layout `application.html.erb`, but sometimes, you want to render a template using a different layout.
-
-#### Example
-
-For instance, let's create a layout called `sidebar.html.erb`
-
-```bash
-touch app/views/layouts/sidebar.html.erb
-```
-
-Take this template and add it into `sidebar.html.erb`:
-
-```html
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Sidebar Template</title>
-</head>
-<body>
-  <header>
-    <h1>My Website</h1>  
-    <ul>
-      <li>Menu 1</li>
-      <li>Menu 2</li>
-      <li>Menu 3</li>
-      <li>Menu 4</li>
-    </ul>
-  </header>
-  <main>
-    <%= yield %>
-  </main>
-  <footer>
-    <ul>
-      <li>About us</li>
-      <li>Team</li>
-      <li>Terms and conditions</li>
-    </ul>
-  </footer>
-</body>
-</html>
-```
-
-This will help us to differentiate the layouts.
-
-In the controller method `index`, add this to the end of the method:
-
-```ruby
-render layout: "sidebar"
-```
-
-This line will just tell Rails to use the same logic of template rendering, but instead of using the default `application.html.erb`, it will render the template inside `sidebar.html.erb`.
-
 
 # Partials
 
@@ -155,6 +91,7 @@ A best practice is to always keep every template as small as possible. A rule of
 
 * Partials are always named starting with an underscore: `_form.html.erb`
 * Partials can be called directly from inside a view file.  `<%= render "menu" %>`
+  * You don't specify the `_` when calling the partial.
 * You can pass data to a partial: `<%= render partial: "customer", object: @new_customer %>`
 
 ### Calling partials
@@ -196,9 +133,10 @@ When a partial is called with a `:collection`, the individual instances of the p
 
 ### Using partials and layouts
 
-Within a layout the partial is inserted at the `<%= yield %>`
+Within a layout the view is inserted at the `<%= yield %>`
 
 If your website is structured like:
+
 ```
   -----    header with menu      -----
   -----    current page content  -----
@@ -308,7 +246,7 @@ And inside move the following from `sidebar.html.erb`:
 
 Now the main `sidebar.html.erb` file is back to a normal size, we just need to include the partials and the final result will then be the same as before.
 
-**Note:** Every partial filename needs to have an underscore as the first character - this way Rails knows that it is not a proper template but only a partial that will be included in a template.
+**Note:** Every partial filename needs to have an underscore as the first character - this way Rails knows that it is not a full template but only a partial that will be included in a template.
 
 Let's now call the partials in the layout:
 
@@ -335,35 +273,6 @@ Rails will automatically look in the folder `app/views/application/` for a file 
 # Basic View Helpers
 
 Rails provides a huge swath of helpers designed to make generating HTML and especially HTML related to your models more convenient.  They also reinforce the "rails-way" conventions by automatically setting html class and id attributes.  We won't cover all of them here so make sure [you do some reading](http://guides.rubyonrails.org/action_view_overview.html#overview-of-helpers-provided-by-action-view) [and maybe read the docs too](http://api.rubyonrails.org/classes/ActionView/Helpers.html).  Don't forget about [URLHelper](http://api.rubyonrails.org/classes/ActionView/Helpers/UrlHelper.html#method-i-link_to).
-
-#### `div_for`
-
-Generates a div that automatically assigns the id attribute to match the passed in object `id`.
-
-```erb
-<%= div_for(@article, class: "frontpage") do %>
-  <td><%= @article.title %></td>
-<% end %>
-```
-Renders:
-```
-<div id="article_1234" class="article frontpage">
-  <td>Hello World!</td>
-</div>
-```
-> Note how this automatically set a class and id.
-
-* `content_tag_for` is similar but can be used for other tags.
-
-## Using Assets and URL Named Helpers
-
-In many cases production assets are not served from the same paths as assets in dev/test.  Using the helpers allows Rails to handle this _detail_ for you. There are also helpers for javascript and stylesheet assets
-
-#### `image_tag`
-
-```erb
-image_tag("icon.png") # => <img src="/assets/icon.png" alt="Icon" />
-```
 
 
 #### [`link_to`](http://api.rubyonrails.org/classes/ActionView/Helpers/UrlHelper.html#method-i-link_to)
@@ -392,36 +301,6 @@ Very similar to `link_to` but may generate a form
 #      <input value="New" type="submit" />
 #    </form>"
 ```
-
-
-#### `form_tag`
-
-Form helpers are one of the largest classes of view helpers that Rails provides.  Get to know these well.
-Rails form helpers help to manage the use of `id`, `name` and HTTP method for your forms.
-
-```erb
-<%= form_tag("/search", method: "get") do %>
-  <%= label_tag(:q, "Search for:") %>
-  <%= text_field_tag(:q) %>
-  <%= submit_tag("Search") %>
-<% end %>
-```
-
-```html
-<form accept-charset="UTF-8" action="/search" method="get">
-  <input name="utf8" type="hidden" value="&#x2713;" />
-  <label for="q">Search for:</label>
-  <input id="q" name="q" type="text" />
-  <input name="commit" type="submit" value="Search" />
-</form>
-```
-
-In the above:
-
-* note how `:q` is sufficient to set which field the label is for and the `id` and `name` of the input.
-  * You can predict this and use it for styling.
-
-
 
 More useful tags:
 
@@ -473,7 +352,6 @@ It may be useful to note the difference between the [FormTagHelper](http://api.r
  * `form_for` is the main entry point for working with FormBuilderHelper.
  * Many `_tag` methods have more specialized methods for use with `form_for`
 * FormTagHelper is more general
- * most methods end in `_tag`
 
 #### `form_for`
 Used to build a form for an active record object.
@@ -626,29 +504,3 @@ form_tag(search_path, method: "patch")
 Check out [this demo app](https://github.com/tgaff/view_helpers_demo_app/blob/master/app/views/people/_form.html.erb)
 
 
-## Writing your own custom View Helpers
-
-You can write your own [view helpers](http://www.rails-dev.com/custom-view-helpers-in-rails-4).
-
-* use this technique to remove code from views
-  * and DRY your views
-
-# Using unobtrusive JavaScript
-
-A large number of the helpers available in Rails have an option to use "Unobtrusive JavaScript".  This allows them to take actions using HTTP methods outside of GET and POST and to perform certain actions more quickly by submitting via javascript.  The JS code for doing this is built-in for you.
-
-Most of the time this can be turned on by passing `remote: true` to the method call.
-
-Examples:
-
-```rb
-<%= button_to "Create", { action: "create" }, remote: true, form: { "data-type" => "json" } %>
-# => "<form method="post" action="/images/create" class="button_to" data-remote="true" data-type="json">
-#      <input value="Create" type="submit" />
-#      <input name="authenticity_token" type="hidden" value="10f2163b45388899ad4d5ae948988266befcb6c3d1b2451cf657a0c293d605a6"/>
-#    </form>"
-```
-
-Much of this also depends on [Turbolinks](https://github.com/rails/turbolinks/).
-
-* ACHTUNG: Having turbolinks enabled can at times interfere with custom javascript you may write for your app.  It's *strongly* recommended that you hold off on using this until you've become more familiar with Rails and read all the docs on Turbolinks.
