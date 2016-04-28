@@ -2,18 +2,20 @@
 *After this lesson, students will be able to:*
 
 - Describe how layouts, templates & views work together
-- Use partials for static content and rendering dynamic content
+- Use partials for static content
 - Use link_to
 - Work with rails form helpers
 
 # External resources
 
 The following can be used along with this lesson:
+
 * [Glossary](glossary.md)
 * [view helpers demo app](https://github.com/tgaff/view_helpers_demo_app)
 * [Lab](https://github.com/sf-wdi-25/rails_partials_helpers)
 * [FormBuilder docs](http://apidock.com/rails/ActionView/Helpers/FormBuilder)
 * [Custom View Helpers](http://www.rails-dev.com/custom-view-helpers-in-rails-4)
+* [render docs](http://apidock.com/rails/ActionController/Base/render)
 
 # Layouts and Partials
 
@@ -81,8 +83,6 @@ render file: "/path/to/rails/app/views/books/edit.html.erb"
 Layouts wrap views.  They are typically used for content that you want to appear on many/all pages on a site.  For example, every page needs the css and javascript files to be included, so we put that in the layout.  Similarly if you're using bootstrap you may have a `<div class='container'>` that you put all the content into.  We can put that `div` into the layout as well.  
 
 * This helps keep our views DRY - we don't repeat common content in each file.
-
-Create a new Rails app "views_and_layouts" and scaffold the resource posts:
 
 
 # Partials
@@ -157,28 +157,28 @@ and a layout that looks like:
 
 ```
   -----    header with menu      -----
-  -----    yield                 -----
+  -----    <%= yield %>          -----
   -----    footer                -----
 ```
 That `yield` is where the current page content will be rendered.
 
 Another alternative would be to move the _header with menu_ into a partial instead.  This option would be best when for example we only use the menu on some pages, but not all.
 
-Likewise if we have a couple of views that are using the same form code or have the same submenu or other HTML code we should consider moving that code into a partial.  Example:
+**DRY views**: Likewise if we have a couple of views that are using the same form code or have the same submenu or other HTML code we should consider moving that code into a partial.  Example:
 
 ```
 # new.html.erb
 -----  new instructions text  -----
 -----  form                   -----
------  form                   -----
------  form                   -----
+-----  form-inputs            -----
+-----  form-submit            -----
 -----  other info             -----
 
 # edit.html.erb
 -----  edit instructions text -----
 -----  form                   -----
------  form                   -----
------  form                   -----
+-----  form-inputs            -----
+-----  form-submit            -----
 ```
 
 In the above case it would be very common to take the `form` out of both pages and put it inside a partial.  Result:
@@ -195,11 +195,14 @@ In the above case it would be very common to take the `form` out of both pages a
 
 # _form.html.erb
 -----  form                   -----
------  form                   -----
------  form                   -----
+-----  form-inputs            -----
+-----  form-submit            -----
 ```
 
 Much DRYer!
+
+
+<!--
 
 ### Exercise
 
@@ -268,7 +271,7 @@ Let's now call the partials in the layout:
 
 Rails will automatically look in the folder `app/views/application/` for a file that is called by the name given to the method `render` with an underscore prefix.
 
-
+-->
 
 # Basic View Helpers
 
@@ -284,6 +287,7 @@ link_to "Profile", profile_path(@profile)
 ```
 
 Setting class and id:
+
 ```ruby
 link_to "Articles", articles_path, id: "news", class: "article"
 # => <a href="/articles" class="article" id="news">Articles</a>
