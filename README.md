@@ -202,80 +202,71 @@ In the above case it would be very common to take the `form` out of both pages a
 Much DRYer!
 
 
-<!--
 
-### Exercise
 
-Let's practice moving a menu into a partial.
+# URL helpers
 
-Create a new file:
+Before we look at some View helpers let's take a minute to talk about the URL helpers in Rails.
 
-```bash
-mkdir app/views/application
-touch app/views/application/_header.html.erb
+Rails adds helpers that express the URL for routes in your app.  These are configured through the router.
+
+Let's look at some `rake routes` output:
+
+```
+$ rake routes
+     Prefix Verb   URI Pattern                 Controller#Action
+    turkeys GET    /turkeys(.:format)          turkeys#index
+            POST   /turkeys(.:format)          turkeys#create
+ new_turkey GET    /turkeys/new(.:format)      turkeys#new
+edit_turkey GET    /turkeys/:id/edit(.:format) turkeys#edit
+     turkey GET    /turkeys/:id(.:format)      turkeys#show
+            PATCH  /turkeys/:id(.:format)      turkeys#update
+            PUT    /turkeys/:id(.:format)      turkeys#update
+            DELETE /turkeys/:id(.:format)      turkeys#destroy
 ```
 
-And inside move the following from `sidebar.html.erb`:
+The **Prefix** on the left clues us in to the available URL helpers.  Based on that prefix I can see that the following helpers exist: `turkeys_path`, `new_turkey_path`, `edit_turkey_path`, `turkey_path`.
 
-```erb
-<header>
-  <h1>My Website</h1>  
-  <ul>
-    <li>Menu 1</li>
-    <li>Menu 2</li>
-    <li>Menu 3</li>
-    <li>Menu 4</li>
-  </ul>
-</header>
+From the output above I can see that some paths require **id**s.  For those helpers I'll pass an object (or an integer) to the helper when I call it.
+
+| URL helper          | calling it with link_to |
+|---------------------| -------------------------------------------|
+| `turkeys_path`        | `link_to "view all turkeys", turkeys_path` |
+| `new_turkey_path`     | `link_to "create a new turkey", new_turkey_path` |
+| `edit_turkey_path`    | `link_to "edit this turkey", edit_turkey(@turkey)` |
+| `turkey_path`         | `link_to "view this turkey", turkey_path(@turkey)` | 
+| `turkey_path`         | `link_to "view this turkey", turkey_path(3021)` | 
+
+
+#### Configuring URL helpers
+
+In your router the above URL helpers are specified if you use `resources` to tell Rails that you want RESTful routes for a resource. 
+
+```rb
+# config/routes.rb
+Rails.application.routes.draw do
+  resources :turkeys
 ```
 
-Now let's create another file:
+You can also set individual URL helper names via the **`as`** key.
 
-```bash
-touch app/views/application/_footer.html.erb
+```rb
+# config/routes.rb
+Rails.application.routes.draw do
+  get 'posts/new', to: 'posts#new', as: 'new_post'
 ```
 
-And inside move the following from `sidebar.html.erb`:
+#### Summary
+* You can see the available URL helpers with `rake routes`.
+* You get some for free if you use `resources`.
+* You can configure new URL helpers with `as` in the router.
+* If a helper requires an **:id** we can pass it an integer or a model instance.
 
-```erb
-<footer>
-  <ul>
-    <li>About us</li>
-    <li>Team</li>
-    <li>Terms and conditions</li>
-  </ul>
-</footer>
-```
-
-Now the main `sidebar.html.erb` file is back to a normal size, we just need to include the partials and the final result will then be the same as before.
-
-**Note:** Every partial filename needs to have an underscore as the first character - this way Rails knows that it is not a full template but only a partial that will be included in a template.
-
-Let's now call the partials in the layout:
-
-```erb
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Sidebar Template</title>
-</head>
-<body>
-  <%= render "header" %>
-  <main>
-    <%= yield %>
-  </main>
-  <%= render "footer" %>
-</body>
-</html>
-```
-
-Rails will automatically look in the folder `app/views/application/` for a file that is called by the name given to the method `render` with an underscore prefix.
-
--->
 
 # Basic View Helpers
 
 Rails provides a huge swath of helpers designed to make generating HTML and especially HTML related to your models more convenient.  They also reinforce the "rails-way" conventions by automatically setting html class and id attributes.  We won't cover all of them here so make sure [you do some reading](http://guides.rubyonrails.org/action_view_overview.html#overview-of-helpers-provided-by-action-view) [and maybe read the docs too](http://api.rubyonrails.org/classes/ActionView/Helpers.html).  Don't forget about [URLHelper](http://api.rubyonrails.org/classes/ActionView/Helpers/UrlHelper.html#method-i-link_to).
+
 
 
 #### [`link_to`](http://api.rubyonrails.org/classes/ActionView/Helpers/UrlHelper.html#method-i-link_to)
