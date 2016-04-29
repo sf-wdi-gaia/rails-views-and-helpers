@@ -64,11 +64,9 @@ Let's take a look at a few different ways of calling render:
 
 ```ruby
 render :edit
-render action: :edit
 render "edit"
+render action: :edit
 render "edit.html.erb"
-render action: "edit"
-render action: "edit.html.erb"
 render "books/edit"
 render "books/edit.html.erb"
 render template: "books/edit"
