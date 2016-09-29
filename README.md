@@ -1,10 +1,26 @@
-# Objectives
-*After this lesson, students will be able to:*
+![](https://ga-dash.s3.amazonaws.com/production/assets/logo-9f88ae6c9c3871690e33280fcf557f33.png)
+# Rails Views and Helpers
+
+### Why is this important?
+<!-- framing the "why" in big-picture/real world examples -->
+*This workshop is important because:*
+
+We want pages users can see and interact with! And we want to take advantage of how easy Rails makes views if we follow the "Rails way!"
+
+### Objectives
+*After this lesson, developers will be able to:*
 
 - Describe how layouts, templates & views work together.
 - Recognize rails url helpers and path helpers.
 - Explain benefits of using Rails form helpers and link helpers.
 - Find and determine correct syntax for Rails form helpers and link helpers.
+
+### Where should we be now?
+*Before this workshop, developers should already be able to:*
+
+- Spin up a Rails app with a route and controller for a home page view.
+- Incorporate routes, controller, and model for a single resource
+- Read and write routes.
 
 ### Resources
 
@@ -279,6 +295,8 @@ We've seen two ways to do something other than rendering the HTML view that matc
  - We can redirect to another action.  
  - We can use a `render` statement to specify a view to render.
 
+> HOORAY!  Rails 5 comes bundled with a `jbuilder` gem that helps us create JSON views instead of HTML. Why is this awesome?
+
 
 ## Helpers in Rails
 
@@ -464,7 +482,7 @@ As we saw with `button_to`, Rails can generate forms for us.  There are two main
 
   </details>
 
-### `form_for`
+### Form Builder and `form_for`
 
 We'll mostly be working with resources, so it's important to get some exposure to `form_for`.
 
@@ -522,14 +540,58 @@ def article_params
   params.require(:article).permit(:title, :body)
 end
 ```
+<!--
+## Independent Practice: View Helper Research
 
-### More Form Builder Methods
+Research one of the methods below, and prepare to give a 2 sentence explanation about where it is used and what it does to everyone!
 
 
-#### `f.select`
+* `csrf_meta_tags`
 
-#### `f.date_field`
+* `stylesheet_link_tag`
 
-#### `f.date_select`
+* `javascript_include_tag`
 
-#### `hidden_field` or `f.hidden_field`
+* `audio_tag`
+
+* `image_tag`
+
+* `image_url`
+
+* `video_tag`
+
+* `time_ago_in_words`
+
+* `hidden_field` or `f.hidden_field`
+
+* `password_field`
+
+* `color_field`
+
+* `f.label`
+
+* `check_box`
+
+* `collection_check_boxes`
+
+* `select` (form builder)
+
+* `date_field`
+
+* `date_select`
+
+* `truncate`
+
+* `pluralize`
+
+* `simple_format`
+
+* `number_to_human` -->
+
+
+### Closing Thoughts
+
+- Describe how layouts, templates & views work together.
+- How can we figure out what path helpers are available?
+- Why would we use `form_for` and `link_to`?
+- Where would you look for syntax for Rails form helpers?
