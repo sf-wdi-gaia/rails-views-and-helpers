@@ -1,4 +1,6 @@
-# Layouts and Partials
+# Glossary / Cheatsheet
+
+## Layouts and Partials
 
 #### `yield`
 
@@ -17,13 +19,13 @@ Yield the view within a div.
 
 #### `render`
 
-Render the `_product.html.erb` partial
+Render the `_product.html.erb` partial in a view
 
 ```erb
 <%= render "product" %>
 ```
 
-Render the partial in `shared/_footer.html.erb`
+Render the partial in `shared/_footer.html.erb` in a view
 ```erb
 <%= render "shared/footer" %>
 ```
@@ -42,15 +44,16 @@ Render a partial in `_product.html.erb` and pass it a variable.
 ```
 
 
-# View helper methods
+## View Helper Methods
 
 #### Linking to assets
 
 * `image_tag`
 
 
-# Form Helper methods
-The follwing methods are used with [`form_for`](http://apidock.com/rails/ActionView/Helpers/FormHelper/form_for) to create a `<form>` element
+# Form Helper Methods
+
+The following methods are used with [`form_for`](http://apidock.com/rails/ActionView/Helpers/FormHelper/form_for) to create a `<form>` element
 
 A form can be constructed for a specific model object by passing it directly.
 ```erb
@@ -89,9 +92,9 @@ Specifying html attributes like `id` and `class`:
 <% end %>
 ```
 
-Accessing associated resources.  In this case adding a new comment to a document.
+Accessing associated resources.  In this example, adding a new comment to an article.
 ```erb
-<%= form_for([@document, @comment]) do |f| %>
+<%= form_for([@article, @comment]) do |f| %>
  ...
 <% end %>
 ```
@@ -156,7 +159,7 @@ Output: `<input type='checkbox'`
 <input checked="checked" type="checkbox" id="post_validated" name="post[validated]" value="1" />
 ```
 
-Note that rails adds a secondary `hidden` field.  See docs for details.
+Note that Rails adds a secondary `hidden` field.  See docs for details.
 
 There's also another checkbox method, `collection_check_boxes`
 
